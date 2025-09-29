@@ -4,10 +4,6 @@
     {
       "src": "api.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "批量计算系统.html",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -17,7 +13,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/批量计算系统.html"
+      "dest": "https://leshan-furniture-batch-calculation.vercel.app/$1"
     }
   ]
 }

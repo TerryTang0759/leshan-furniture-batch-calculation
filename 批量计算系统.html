@@ -359,44 +359,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* 下载按钮样式 */
-        .download-section {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .download-btn {
-            background: linear-gradient(135deg, var(--accent-green), #30d158);
-            color: white;
-            border: none;
-            border-radius: var(--radius-medium);
-            padding: 15px 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 199, 89, 0.4);
-        }
-
-        .download-btn:active {
-            transform: translateY(0);
-        }
-
-        .download-btn:disabled {
-            background: var(--secondary-text);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
         /* 加载状态 */
         .loading-spinner {
             display: inline-block;
@@ -563,13 +525,6 @@
                             <div class="stat-label">最高单价</div>
                         </div>
                     </div>
-                </div>
-
-                <!-- 下载按钮 -->
-                <div class="download-section" id="downloadSection" style="display: none;">
-                    <button class="download-btn" onclick="downloadExcel()">
-                        📥 下载Excel报告
-                    </button>
                 </div>
 
                 <!-- 结果表格 -->
@@ -823,7 +778,6 @@
             // 显示结果区域
             document.getElementById('resultsContainer').style.display = 'block';
             document.getElementById('statsCard').style.display = 'block';
-            document.getElementById('downloadSection').style.display = 'block';
             document.getElementById('emptyState').style.display = 'none';
         }
 
@@ -849,7 +803,6 @@
             // 隐藏结果
             document.getElementById('resultsContainer').style.display = 'none';
             document.getElementById('statsCard').style.display = 'none';
-            document.getElementById('downloadSection').style.display = 'none';
             document.getElementById('emptyState').style.display = 'block';
             
             // 重置预览
@@ -868,126 +821,6 @@
                 clearInputs();
             }
         });
-
-        // 下载Excel文件
-        async function downloadExcel() {
-            if (!calculationResults || calculationResults.length === 0) {
-                alert('暂无计算结果，请先进行计算');
-                return;
-            }
-
-            try {
-                // 获取输入数据
-                const heightInput = document.getElementById('standardHeight');
-                const widthInput = document.getElementById('standardWidth');
-                const depthInput = document.getElementById('standardDepth');
-                
-                const inputData = {
-                    height: heightInput ? heightInput.value : '0',
-                    width: widthInput ? widthInput.value : '0',
-                    depth: depthInput ? depthInput.value : '0',
-                    projectionArea: calculationResults[0]?.projectionArea || 0
-                };
-
-                // 准备导出数据
-                const exportData = calculationResults.map(result => ({
-                    materialName: result.name,
-                    price: result.materialPrice,
-                    projectionUnitPrice: result.projectionUnitPrice,
-                    totalPrice: result.totalPrice
-                }));
-
-                // 发送请求到后端
-                const response = await fetch('/api/export-excel', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        calculationData: exportData,
-                        inputData: inputData
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('导出失败');
-                }
-
-                // 获取Excel文件
-                const blob = await response.blob();
-                
-                // 创建下载链接
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                
-                // 从响应头获取文件名
-                const contentDisposition = response.headers.get('Content-Disposition');
-                let filename = '乐山家具定制_投影面积计算结果.xlsx';
-                if (contentDisposition) {
-                    const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-                    if (filenameMatch) {
-                        filename = decodeURIComponent(filenameMatch[1]);
-                    }
-                }
-                
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                
-                // 清理
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-
-                // 显示成功提示
-                showNotification('Excel文件下载成功！', 'success');
-
-            } catch (error) {
-                console.error('下载Excel失败:', error);
-                showNotification('下载Excel失败，请重试', 'error');
-            }
-        }
-
-        // 显示通知
-        function showNotification(message, type = 'info') {
-            // 创建通知元素
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.textContent = message;
-            
-            // 添加样式
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#34c759' : type === 'error' ? '#ff3b30' : '#007aff'};
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                z-index: 1000;
-                font-weight: 600;
-                animation: slideIn 0.3s ease;
-            `;
-            
-            // 添加动画样式
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            document.body.appendChild(notification);
-            
-            // 3秒后自动移除
-            setTimeout(() => {
-                notification.remove();
-                style.remove();
-            }, 3000);
-        }
     </script>
 </body>
 </html>
