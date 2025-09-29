@@ -38,13 +38,19 @@ leshan-furniture-batch-calculation/
 
 ### 步骤3：配置构建设置
 
-#### 构建设置
+#### 构建设置（确保与Vercel一致）
 ```
 框架预设: Node.js
-构建命令: npm install && npm run build
+构建命令: npm install
 输出目录: ./
 根目录: ./
+启动命令: node api.js
 ```
+
+**重要说明**：
+- EdgeOne Pages使用与Vercel相同的构建器（`@vercel/node`和`@vercel/static`）
+- 确保路由配置与Vercel完全一致
+- 使用相同的`batch.html`作为主页面
 
 #### 环境变量配置
 在项目设置中添加以下环境变量：
