@@ -6,15 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "test.html",
-      "use": "@vercel/static"
-    },
-    {
       "src": "batch.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "index.html",
       "use": "@vercel/static"
     }
   ],
@@ -24,16 +16,8 @@
       "dest": "/api.js"
     },
     {
-      "src": "/test",
-      "dest": "/test.html"
-    },
-    {
-      "src": "/batch",
-      "dest": "/batch.html"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/test.html"
+      "dest": "/batch.html"
     }
   ]
 }
