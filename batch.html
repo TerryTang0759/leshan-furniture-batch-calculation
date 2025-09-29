@@ -397,6 +397,44 @@
             box-shadow: none;
         }
 
+        /* 下载按钮样式 */
+        .download-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--accent-green), #30d158);
+            color: white;
+            border: none;
+            border-radius: var(--radius-medium);
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 199, 89, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn:disabled {
+            background: var(--secondary-text);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         /* 加载状态 */
         .loading-spinner {
             display: inline-block;
@@ -849,6 +887,7 @@
             // 隐藏结果
             document.getElementById('resultsContainer').style.display = 'none';
             document.getElementById('statsCard').style.display = 'none';
+            document.getElementById('downloadSection').style.display = 'none';
             document.getElementById('emptyState').style.display = 'block';
             
             // 重置预览
