@@ -9,7 +9,9 @@
   "scripts": {
     "start": "node api.js",
     "dev": "node api.js",
-    "batch-system": "node api.js"
+    "batch-system": "node api.js",
+    "deploy:edgeone": "edgeone deploy",
+    "build": "echo 'Build completed'"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "name": "leshan-furniture-batch-calculation",
+  "builds": [
+    {
+      "src": "api.js",
+      "use": "@edgeone/node"
+    },
+    {
+      "src": "batch.html",
+      "use": "@edgeone/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/batch.html"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

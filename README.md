@@ -34,7 +34,13 @@ open http://localhost:3001
 
 ## 🌐 云端部署
 
-### Vercel部署（推荐）
+### EdgeOne部署（推荐）
+1. 访问 https://console.edgeone.com
+2. 导入GitHub仓库：`TerryTang0759/leshan-furniture-batch-calculation`
+3. 配置环境变量（见下方配置）
+4. 一键部署
+
+### Vercel部署（备选）
 1. 访问 https://vercel.com
 2. 导入GitHub仓库：`TerryTang0759/leshan-furniture-batch-calculation`
 3. 配置环境变量（见下方配置）
