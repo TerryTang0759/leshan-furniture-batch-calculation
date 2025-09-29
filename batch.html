@@ -877,10 +877,14 @@
 
             try {
                 // 获取输入数据
+                const heightInput = document.getElementById('standardHeight');
+                const widthInput = document.getElementById('standardWidth');
+                const depthInput = document.getElementById('standardDepth');
+                
                 const inputData = {
-                    height: document.getElementById('height').value,
-                    width: document.getElementById('width').value,
-                    depth: document.getElementById('depth').value,
+                    height: heightInput ? heightInput.value : '0',
+                    width: widthInput ? widthInput.value : '0',
+                    depth: depthInput ? depthInput.value : '0',
                     projectionArea: calculationResults[0]?.projectionArea || 0
                 };
 
