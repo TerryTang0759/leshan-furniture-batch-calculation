@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "batch.html",
+      "src": "批量计算系统.html",
       "use": "@vercel/static"
     }
   ],
@@ -17,7 +17,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/batch.html"
+      "dest": "/批量计算系统.html"
     }
   ]
 }
