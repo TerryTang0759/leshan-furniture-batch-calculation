@@ -36,11 +36,4 @@
       "dest": "/测试页面.html"
     }
   ],
-  "env": {
-    "MONGODB_USERNAME": "@mongodb_username",
-    "MONGODB_PASSWORD": "@mongodb_password",
-    "MONGODB_CLUSTER": "@mongodb_cluster",
-    "MONGODB_DATABASE": "@mongodb_database",
-    "MONGODB_COLLECTION": "@mongodb_collection"
-  }
 }
