@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乐山家具定制 - 柜体投影面积报价计算系统</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-blue: #007aff;
+            --accent-green: #34c759;
+            --accent-orange: #ff9500;
+            --background: #ffffff;
+            --surface: #f8f9fa;
+            --border-light: #e1e5e9;
+            --primary-text: #1d1d1f;
+            --secondary-text: #86868b;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --radius-small: 8px;
+            --radius-medium: 12px;
+            --radius-large: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--primary-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: var(--radius-large);
+            box-shadow: 0 8px 32px var(--shadow-light);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--secondary-text);
+            margin-bottom: 20px;
+        }
+
+        .brand-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-section, .result-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: var(--radius-large);
+            box-shadow: 0 8px 32px var(--shadow-light);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-small);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .unit-label {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: var(--radius-small);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: var(--radius-medium);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-blue);
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            background: rgba(0, 122, 255, 0.05);
+            margin: 15px -15px -15px -15px;
+            padding: 15px;
+            border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+        }
+
+        .result-label {
+            color: var(--secondary-text);
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .result-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(0, 122, 255, 0.1));
+            border-radius: var(--radius-medium);
+            margin-top: 20px;
+        }
+
+        .formula-display {
+            background: rgba(0, 122, 255, 0.05);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            border-radius: var(--radius-small);
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .formula-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent-blue);
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--secondary-text);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+
+        .status-ready {
+            background: rgba(52, 199, 89, 0.1);
+            color: var(--accent-green);
+        }
+
+        .status-ready::before {
+            content: '●';
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-row, .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .input-section, .result-section {
+                padding: 20px;
+            }
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #ff9500, #ff6b35);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-small);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>柜体投影面积报价计算系统</h1>
+            <p>快速计算柜体投影面积单价，精确到元</p>
+            <div class="brand-badge">乐山家具定制</div>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2 class="section-title">
+                    📐 柜体参数输入
+                    <span class="status-indicator status-ready" id="inputStatus">准备就绪</span>
+                </h2>
+
+                <!-- 柜体尺寸输入 -->
+                <div class="form-group">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 15px; font-size: 1.1rem;">📏 柜体尺寸</h3>
+                    <div class="form-row">
+                        <div>
+                            <label for="cabinetWidth">柜体宽度 (cm)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="cabinetWidth" placeholder="请输入宽度" step="0.1" min="0">
+                                <span class="unit-label">cm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="cabinetHeight">柜体高度 (cm)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="cabinetHeight" placeholder="请输入高度" step="0.1" min="0">
+                                <span class="unit-label">cm</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div>
+                            <label for="cabinetDepth">柜体深度 (cm)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="cabinetDepth" placeholder="请输入深度" step="0.1" min="0">
+                                <span class="unit-label">cm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="cabinetName">柜体名称</label>
+                            <input type="text" id="cabinetName" placeholder="如：主卧衣柜">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 隔板设置 -->
+                <div class="form-group">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 15px; font-size: 1.1rem;">📋 隔板设置</h3>
+                    <div class="form-row">
+                        <div>
+                            <label for="horizontalShelves">横隔板数量</label>
+                            <input type="number" id="horizontalShelves" placeholder="0" step="1" min="0">
+                        </div>
+                        <div>
+                            <label for="verticalShelves">竖隔板数量</label>
+                            <input type="number" id="verticalShelves" placeholder="0" step="1" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 材质选择 -->
+                <div class="form-group">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 15px; font-size: 1.1rem;">🏗️ 材质选择</h3>
+                    <div class="form-group">
+                        <label for="cabinetMaterial">柜体材质</label>
+                        <select id="cabinetMaterial" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-small); font-size: 1rem; background: white;">
+                            <option value="">请选择柜体材质</option>
+                            <option value="280">标准密度板 18mm - ¥280/㎡</option>
+                            <option value="320">高密度板 18mm - ¥320/㎡</option>
+                            <option value="350">实木颗粒板 18mm - ¥350/㎡</option>
+                            <option value="400">生态板 18mm - ¥400/㎡</option>
+                            <option value="450">多层实木板 18mm - ¥450/㎡</option>
+                            <option value="480">纯实木板 18mm - ¥480/㎡</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 计算按钮 -->
+                <button class="calculate-btn" onclick="calculateCabinetAndProjection()">
+                    🧮 计算拆板总价和投影面积单价
+                </button>
+
+                <button class="clear-btn" onclick="clearInputs()">
+                    🗑️ 清空输入
+                </button>
+            </div>
+
+            <div class="result-section">
+                <h2 class="section-title">📊 计算结果</h2>
+
+                <!-- 拆板计算详情 -->
+                <div class="result-card" id="cabinetDetailCard" style="display: none;">
+                    <div class="result-title">🏗️ 柜体拆板计算详情</div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">柜体名称</span>
+                        <span class="result-value" id="resultCabinetName">-</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">柜体尺寸</span>
+                        <span class="result-value" id="resultCabinetSize">-</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">柜体材质</span>
+                        <span class="result-value" id="resultCabinetMaterial">-</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">拆板总面积</span>
+                        <span class="result-value" id="resultCabinetArea">-</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">材质单价</span>
+                        <span class="result-value" id="resultMaterialPrice">-</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">拆板总价</span>
+                        <span class="result-value" id="resultTotalPrice">-</span>
+                    </div>
+                </div>
+
+                <!-- 投影面积计算 -->
+                <div class="result-card" id="projectionCard" style="display: none;">
+                    <div class="result-title">📐 投影面积计算</div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">投影面积</span>
+                        <span class="result-value" id="resultProjectionArea">-</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">投影面积单价</span>
+                        <span class="result-value" id="resultProjectionUnitPrice">-</span>
+                    </div>
+                </div>
+
+                <!-- 最终价格 -->
+                <div class="result-price" id="finalPrice" style="display: none;">
+                    <div style="font-size: 1.2rem; margin-bottom: 8px;">投影面积单价</div>
+                    <div id="finalPriceValue">¥0</div>
+                    <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.8;">元/㎡</div>
+                </div>
+
+                <!-- 计算公式显示 -->
+                <div class="formula-display" id="formulaDisplay" style="display: none;">
+                    <div class="formula-title">🧮 计算公式</div>
+                    <div><strong>拆板总面积</strong> = 顶板+底板+左右侧板+背板+横隔板+竖隔板</div>
+                    <div><strong>拆板总价</strong> = 拆板总面积 × 材质单价</div>
+                    <div><strong>投影面积单价</strong> = 拆板总价 ÷ (柜体宽度 × 柜体高度)</div>
+                </div>
+
+                <div style="text-align: center; color: var(--secondary-text); margin-top: 30px; padding: 20px; background: rgba(0, 0, 0, 0.05); border-radius: var(--radius-small);">
+                    <h3 style="margin-bottom: 15px; color: var(--primary-color);">💡 使用说明</h3>
+                    <p style="margin-bottom: 10px;">1. 输入柜体尺寸（宽×高×深）和隔板数量</p>
+                    <p style="margin-bottom: 10px;">2. 选择柜体材质</p>
+                    <p style="margin-bottom: 10px;">3. 系统自动计算拆板总面积和总价</p>
+                    <p style="margin-bottom: 10px;">4. 自动计算投影面积单价（精确到元）</p>
+                    <p style="font-weight: 600; color: var(--accent-blue);">一体化计算，无需手动输入拆板总价</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let calculationHistory = [];
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加输入监听器，实时更新状态
+            const inputs = ['cabinetWidth', 'cabinetHeight', 'cabinetDepth', 'cabinetMaterial'];
+            inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', updateInputStatus);
+                    element.addEventListener('change', updateInputStatus);
+                }
+            });
+        });
+
+        // 更新输入状态
+        function updateInputStatus() {
+            const width = parseFloat(document.getElementById('cabinetWidth').value);
+            const height = parseFloat(document.getElementById('cabinetHeight').value);
+            const depth = parseFloat(document.getElementById('cabinetDepth').value);
+            const material = document.getElementById('cabinetMaterial').value;
+            
+            const statusElement = document.getElementById('inputStatus');
+            
+            if (width > 0 && height > 0 && depth > 0 && material) {
+                statusElement.textContent = '参数完整';
+                statusElement.className = 'status-indicator status-ready';
+            } else {
+                statusElement.textContent = '参数不完整';
+                statusElement.className = 'status-indicator status-ready';
+            }
+        }
+
+        // 计算柜体拆板面积（基于主系统逻辑）
+        function calculateCabinetArea(width, height, depth, horizontalShelves, verticalShelves) {
+            // 转换为米
+            const w = width / 100;
+            const h = height / 100;
+            const d = depth / 100;
+            
+            // 柜体面积计算（不包括门板）
+            const topBottom = 2 * (w * d);                    // 顶板+底板
+            const leftRight = 2 * (d * h);                    // 左右侧板
+            const back = w * h;                               // 背板
+            const horizontalShelvesArea = horizontalShelves * (w * d); // 横隔板
+            const verticalShelvesArea = verticalShelves * (d * h);     // 竖隔板
+            
+            return topBottom + leftRight + back + horizontalShelvesArea + verticalShelvesArea;
+        }
+
+        // 计算柜体拆板总价和投影面积单价
+        function calculateCabinetAndProjection() {
+            // 获取输入值
+            const width = parseFloat(document.getElementById('cabinetWidth').value);
+            const height = parseFloat(document.getElementById('cabinetHeight').value);
+            const depth = parseFloat(document.getElementById('cabinetDepth').value);
+            const horizontalShelves = parseInt(document.getElementById('horizontalShelves').value) || 0;
+            const verticalShelves = parseInt(document.getElementById('verticalShelves').value) || 0;
+            const materialPrice = parseFloat(document.getElementById('cabinetMaterial').value);
+            const cabinetName = document.getElementById('cabinetName').value || '未命名柜体';
+
+            // 验证输入
+            if (!width || !height || !depth || !materialPrice || width <= 0 || height <= 0 || depth <= 0 || materialPrice <= 0) {
+                alert('请正确填写所有参数！\n- 柜体尺寸必须大于0\n- 请选择柜体材质');
+                return;
+            }
+
+            // 计算拆板总面积
+            const cabinetArea = calculateCabinetArea(width, height, depth, horizontalShelves, verticalShelves);
+            
+            // 计算拆板总价
+            const totalPrice = cabinetArea * materialPrice;
+            
+            // 计算投影面积（平方米）
+            const projectionArea = (width * height) / 10000; // cm² 转换为 m²
+            
+            // 计算投影面积单价
+            const projectionUnitPrice = totalPrice / projectionArea;
+
+            // 显示结果
+            displayCabinetResults(width, height, depth, cabinetName, materialPrice, cabinetArea, totalPrice, projectionArea, projectionUnitPrice);
+
+            // 保存到历史记录
+            saveCabinetCalculation(width, height, depth, cabinetName, materialPrice, cabinetArea, totalPrice, projectionArea, projectionUnitPrice);
+        }
+
+        // 显示柜体计算结果
+        function displayCabinetResults(width, height, depth, cabinetName, materialPrice, cabinetArea, totalPrice, projectionArea, projectionUnitPrice) {
+            // 获取材质名称
+            const materialSelect = document.getElementById('cabinetMaterial');
+            const selectedOption = materialSelect.options[materialSelect.selectedIndex];
+            const materialName = selectedOption.text;
+
+            // 更新拆板计算详情
+            document.getElementById('resultCabinetName').textContent = cabinetName;
+            document.getElementById('resultCabinetSize').textContent = `${width} × ${height} × ${depth} cm`;
+            document.getElementById('resultCabinetMaterial').textContent = materialName;
+            document.getElementById('resultCabinetArea').textContent = `${cabinetArea.toFixed(4)} ㎡`;
+            document.getElementById('resultMaterialPrice').textContent = `¥${materialPrice}/㎡`;
+            document.getElementById('resultTotalPrice').textContent = `¥${totalPrice.toFixed(2)}`;
+
+            // 更新投影面积计算
+            document.getElementById('resultProjectionArea').textContent = `${projectionArea.toFixed(4)} ㎡`;
+            document.getElementById('resultProjectionUnitPrice').textContent = `¥${projectionUnitPrice.toFixed(2)}/㎡`;
+
+            // 显示最终价格
+            document.getElementById('finalPriceValue').textContent = `¥${Math.round(projectionUnitPrice)}`;
+            
+            // 显示所有结果区域
+            document.getElementById('cabinetDetailCard').style.display = 'block';
+            document.getElementById('projectionCard').style.display = 'block';
+            document.getElementById('finalPrice').style.display = 'block';
+            document.getElementById('formulaDisplay').style.display = 'block';
+
+            // 滚动到结果区域
+            document.getElementById('cabinetDetailCard').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+
+        // 保存柜体计算历史
+        function saveCabinetCalculation(width, height, depth, cabinetName, materialPrice, cabinetArea, totalPrice, projectionArea, projectionUnitPrice) {
+            const calculation = {
+                timestamp: new Date().toLocaleString('zh-CN'),
+                cabinetName: cabinetName,
+                width: width,
+                height: height,
+                depth: depth,
+                materialPrice: materialPrice,
+                cabinetArea: cabinetArea,
+                totalPrice: totalPrice,
+                projectionArea: projectionArea,
+                projectionUnitPrice: projectionUnitPrice,
+                roundedPrice: Math.round(projectionUnitPrice)
+            };
+
+            calculationHistory.unshift(calculation);
+            
+            // 只保留最近10次计算
+            if (calculationHistory.length > 10) {
+                calculationHistory = calculationHistory.slice(0, 10);
+            }
+
+            // 保存到本地存储
+            localStorage.setItem('cabinetProjectionCalculationHistory', JSON.stringify(calculationHistory));
+        }
+
+        // 清空输入
+        function clearInputs() {
+            document.getElementById('cabinetWidth').value = '';
+            document.getElementById('cabinetHeight').value = '';
+            document.getElementById('cabinetDepth').value = '';
+            document.getElementById('cabinetName').value = '';
+            document.getElementById('horizontalShelves').value = '';
+            document.getElementById('verticalShelves').value = '';
+            document.getElementById('cabinetMaterial').selectedIndex = 0;
+            
+            // 隐藏结果
+            document.getElementById('cabinetDetailCard').style.display = 'none';
+            document.getElementById('projectionCard').style.display = 'none';
+            document.getElementById('finalPrice').style.display = 'none';
+            document.getElementById('formulaDisplay').style.display = 'none';
+            
+            // 重置状态
+            updateInputStatus();
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            const saved = localStorage.getItem('cabinetProjectionCalculationHistory');
+            if (saved) {
+                calculationHistory = JSON.parse(saved);
+            }
+        }
+
+        // 页面加载时加载历史记录
+        document.addEventListener('DOMContentLoaded', loadHistory);
+
+        // 添加键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            // Enter键计算
+            if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) {
+                calculateCabinetAndProjection();
+            }
+            
+            // Ctrl+Enter清空
+            if (e.key === 'Enter' && e.ctrlKey) {
+                clearInputs();
+            }
+        });
+
+        // 输入格式化
+        function formatInput(input) {
+            let value = parseFloat(input.value);
+            if (isNaN(value)) {
+                input.value = '';
+                return;
+            }
+            
+            // 保留适当的小数位数
+            if (input.id === 'cabinetWidth' || input.id === 'cabinetHeight' || input.id === 'cabinetDepth') {
+                input.value = value.toFixed(1);
+            } else if (input.id === 'horizontalShelves' || input.id === 'verticalShelves') {
+                input.value = Math.round(value);
+            }
+        }
+
+        // 添加输入格式化监听器
+        document.addEventListener('DOMContentLoaded', function() {
+            const formatInputs = ['cabinetWidth', 'cabinetHeight', 'cabinetDepth', 'horizontalShelves', 'verticalShelves'];
+            formatInputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('blur', function() {
+                        formatInput(this);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
