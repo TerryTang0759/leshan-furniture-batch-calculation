@@ -890,8 +890,8 @@
 
                 // 准备导出数据
                 const exportData = calculationResults.map(result => ({
-                    materialName: result.materialName,
-                    price: result.price,
+                    materialName: result.name,
+                    price: result.materialPrice,
                     projectionUnitPrice: result.projectionUnitPrice,
                     totalPrice: result.totalPrice
                 }));
