@@ -5,6 +5,7 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
 const path = require('path');
+const XLSX = require('xlsx');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -219,6 +220,92 @@ function calculateCabinetArea(height, width, depth) {
 }
 
 // 系统状态检查
+// API路由 - 导出Excel文件
+app.post('/api/export-excel', async (req, res) => {
+    try {
+        const { calculationData, inputData } = req.body;
+        
+        if (!calculationData || !inputData) {
+            return res.status(400).json({
+                success: false,
+                error: '参数缺失',
+                message: '缺少计算数据或输入数据'
+            });
+        }
+
+        // 创建工作簿
+        const workbook = XLSX.utils.book_new();
+        
+        // 创建数据工作表
+        const worksheetData = [
+            ['乐山家具定制 - 批量投影面积计算报告'],
+            [''],
+            ['计算参数'],
+            ['高度 (mm)', inputData.height],
+            ['宽度 (mm)', inputData.width],
+            ['深度 (mm)', inputData.depth],
+            ['投影面积 (m²)', inputData.projectionArea],
+            [''],
+            ['计算结果'],
+            ['序号', '材质名称', '单价 (元/m²)', '投影面积单价 (元/m²)', '拆板总价 (元)']
+        ];
+
+        // 添加计算结果数据
+        calculationData.forEach((item, index) => {
+            worksheetData.push([
+                index + 1,
+                item.materialName,
+                item.price,
+                item.projectionUnitPrice.toFixed(2),
+                item.totalPrice.toFixed(2)
+            ]);
+        });
+
+        // 添加统计信息
+        worksheetData.push(['']);
+        worksheetData.push(['统计信息']);
+        worksheetData.push(['最高单价', calculationData[calculationData.length - 1]?.projectionUnitPrice.toFixed(2) || '0']);
+        worksheetData.push(['最低单价', calculationData[0]?.projectionUnitPrice.toFixed(2) || '0']);
+        worksheetData.push(['平均单价', (calculationData.reduce((sum, item) => sum + item.projectionUnitPrice, 0) / calculationData.length).toFixed(2)]);
+        worksheetData.push(['材质总数', calculationData.length]);
+
+        // 创建工作表
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+        
+        // 设置列宽
+        worksheet['!cols'] = [
+            { wch: 15 }, // 序号
+            { wch: 25 }, // 材质名称
+            { wch: 15 }, // 单价
+            { wch: 20 }, // 投影面积单价
+            { wch: 15 }  // 拆板总价
+        ];
+
+        // 添加工作表到工作簿
+        XLSX.utils.book_append_sheet(workbook, worksheet, '投影面积计算结果');
+
+        // 生成Excel文件
+        const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+        // 设置响应头
+        const filename = `乐山家具定制_投影面积计算结果_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+        res.setHeader('Content-Length', excelBuffer.length);
+
+        // 发送文件
+        res.send(excelBuffer);
+
+    } catch (error) {
+        console.error('导出Excel失败:', error);
+        res.status(500).json({
+            success: false,
+            error: '导出Excel失败',
+            message: error.message
+        });
+    }
+});
+
 app.get('/api/health', async (req, res) => {
     const client = new MongoClient(uri);
     

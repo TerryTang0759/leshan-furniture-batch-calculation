@@ -9,6 +9,7 @@
 - **批量计算**: 自动计算33种材质的投影面积单价
 - **MongoDB集成**: 从数据库获取最新材质价格
 - **详细计算逻辑**: 透明展示每个计算步骤
+- **Excel导出**: 一键下载计算结果为Excel文件
 - **响应式设计**: 支持各种设备访问
 
 ## 🚀 快速开始
@@ -79,6 +80,7 @@ open http://localhost:3001
 - 33种材质的投影面积单价排序
 - 详细的计算步骤说明
 - 统计数据汇总
+- Excel文件导出功能
 
 ## 📁 项目结构
 
@@ -104,7 +106,12 @@ GET /api/prices
 
 ### 批量计算
 ```
-GET /api/batch-calculate?height=2000&width=800&depth=600
+POST /api/batch-calculate
+```
+
+### Excel导出
+```
+POST /api/export-excel
 ```
 
 ### 健康检查
