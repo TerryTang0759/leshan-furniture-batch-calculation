@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "测试页面.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "批量计算系统.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api.js"
+    },
+    {
+      "src": "/test",
+      "dest": "/测试页面.html"
+    },
+    {
+      "src": "/batch",
+      "dest": "/批量计算系统.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/测试页面.html"
+    }
+  ],
+  "env": {
+    "MONGODB_USERNAME": "@mongodb_username",
+    "MONGODB_PASSWORD": "@mongodb_password",
+    "MONGODB_CLUSTER": "@mongodb_cluster",
+    "MONGODB_DATABASE": "@mongodb_database",
+    "MONGODB_COLLECTION": "@mongodb_collection"
+  }
+}
