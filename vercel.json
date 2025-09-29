@@ -6,11 +6,11 @@
       "use": "@vercel/node"
     },
     {
-      "src": "测试页面.html",
+      "src": "test.html",
       "use": "@vercel/static"
     },
     {
-      "src": "批量计算系统.html",
+      "src": "batch.html",
       "use": "@vercel/static"
     },
     {
@@ -25,15 +25,15 @@
     },
     {
       "src": "/test",
-      "dest": "/测试页面.html"
+      "dest": "/test.html"
     },
     {
       "src": "/batch",
-      "dest": "/批量计算系统.html"
+      "dest": "/batch.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/测试页面.html"
+      "dest": "/test.html"
     }
-  ],
+  ]
 }
